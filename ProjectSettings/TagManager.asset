@@ -47,12 +47,6 @@ TagManager:
   - name: Level
     uniqueID: 966732449
     locked: 0
-  - name: Enemies
-    uniqueID: 1182671553
-    locked: 0
   - name: Characters
     uniqueID: 722692383
-    locked: 0
-  - name: Objects
-    uniqueID: 611679059
     locked: 0
