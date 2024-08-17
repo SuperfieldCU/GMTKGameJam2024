@@ -5,7 +5,7 @@ using static UnityEngine.InputSystem.InputAction;
 
 //ensure gameobject has required component
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(CapsuleCollider2D))]
+[RequireComponent(typeof(SpriteRenderer))]
 public class PlayerMovement : MonoBehaviour
 {
     private PlayerControls controls;
