@@ -134,7 +134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 4
   chaseDistance: 20
-  stopDistance: 1
+  stopDistance: 0.5
   attackDirections: 00000000020000000100000003000000
   attackPositions:
   - {fileID: 5248297580143734216}
