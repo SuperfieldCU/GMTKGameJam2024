@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    enum CharacterType { Player, Enemy, Object };
+    public enum ECharacterType { Player, Enemy, Object };
 
-    [SerializeField] private CharacterType charType;
+    [SerializeField] private ECharacterType charType;
 
     [SerializeField] private int health;
 

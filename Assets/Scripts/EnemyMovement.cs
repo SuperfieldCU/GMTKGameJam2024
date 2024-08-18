@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
-    enum AttackDirections { MeleeR, MeleeL, RangeR, RangeL };
+    public enum EAttackDirections { MeleeR, MeleeL, RangeR, RangeL, Null };
 
     [Header("Movement")]
     [SerializeField]
@@ -16,7 +17,7 @@ public class EnemyMovement : MonoBehaviour
 
     [Header("Attack Positions")]
     [SerializeField]
-    private AttackDirections[] attackDirections;
+    private EAttackDirections[] attackDirections;
 
     [SerializeField]
     private GameObject[] attackPositions;
@@ -28,9 +29,9 @@ public class EnemyMovement : MonoBehaviour
     private SpriteRenderer spriteRenderer;
 
 
-    private Dictionary<AttackDirections, GameObject> attackPoints = new Dictionary<AttackDirections, GameObject>();
+    private Dictionary<EAttackDirections, GameObject> attackPoints = new Dictionary<EAttackDirections, GameObject>();
 
-    private AttackDirections attackDirection;
+    private EAttackDirections attackDirection;
     // Start is called before the first frame update
     void Start()
     {
@@ -72,5 +73,45 @@ public class EnemyMovement : MonoBehaviour
     void StopChaseTarget()
     {
 
+    }
+
+    public bool IsRightOfTarget()
+    {
+        return transform.position.x >= target.transform.position.x;
+    }
+
+    public float GetRangedDistance()
+    {
+        EAttackDirections rangeDir = EAttackDirections.RangeR;
+        if (IsRightOfTarget())
+        {
+            rangeDir = EAttackDirections.RangeL;
+        }
+        return Vector2.Distance(attackPoints[rangeDir].transform.position, target.transform.position);
+    }
+
+    public float GetMeleeDistance()
+    {
+        EAttackDirections meleeDir = EAttackDirections.MeleeR;
+        if (IsRightOfTarget())
+        {
+            meleeDir = EAttackDirections.MeleeL;
+        }
+        return Vector2.Distance(attackPoints[meleeDir].transform.position, target.transform.position);
+    }
+
+    public float GetChaseDistance()
+    {
+        return chaseDistance;
+    }
+
+    public EAttackDirections GetAttackDirection()
+    {
+        return attackDirection;
+    }
+
+    public bool IsWithinRange()
+    {
+        return Vector2.Distance(transform.position, target.transform.position) <= GetChaseDistance();
     }
 }
