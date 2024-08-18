@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(Animator))]
 public class EnemyMovement : MonoBehaviour
 {
     public enum EAttackDirections { MeleeR, MeleeL, RangeR, RangeL, Null };
@@ -32,6 +34,7 @@ public class EnemyMovement : MonoBehaviour
     private float targetDistance;
 
     private SpriteRenderer spriteRenderer;
+    private Animator animator;
 
 
     private Dictionary<EAttackDirections, GameObject> attackPoints = new Dictionary<EAttackDirections, GameObject>();
@@ -46,6 +49,7 @@ public class EnemyMovement : MonoBehaviour
     {
         target = FindObjectOfType<PlayerMovement>().gameObject;
         spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
 
         for (int i = 0; i < attackDirections.Length && i < attackPositions.Length; i++)
         {
@@ -78,6 +82,10 @@ public class EnemyMovement : MonoBehaviour
             {
                 ChaseTarget();
             }
+            else if (targetDistance <= stopDistance)
+            {
+                AttackTarget();
+            }
             else
             {
                 StopChaseTarget();
@@ -97,9 +105,21 @@ public class EnemyMovement : MonoBehaviour
         transform.position += newPointPos - attackPoints[attackDirection].transform.position;
     }
 
+    void AttackTarget()
+    {
+        animator.SetBool("isMoving", false);
+        actionMode = EActionMode.Attack;
+        MeleeAttack();
+    }
+
+    void MeleeAttack()
+    {
+        animator.SetBool("meleeAttack", true);
+    }
+
     void StopChaseTarget()
     {
-
+        animator.SetBool("isMoving", false);
     }
 
     public void AssignPosition(EAttackDirections dir)
@@ -107,6 +127,7 @@ public class EnemyMovement : MonoBehaviour
         attackDirection = dir;
         if (attackDirection == EAttackDirections.Null)
         {
+            animator.SetBool("isMoving", true);
             actionMode = EActionMode.Wander;
             float angle = UnityEngine.Random.Range(0, 360.0f);
             float distance = UnityEngine.Random.Range(0, wanderDistance);
@@ -114,6 +135,7 @@ public class EnemyMovement : MonoBehaviour
         }
         else
         {
+            animator.SetBool("isMoving", true);
             actionMode = EActionMode.Pursue;
         }
     }
