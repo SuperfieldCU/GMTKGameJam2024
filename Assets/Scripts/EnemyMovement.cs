@@ -7,6 +7,8 @@ public class EnemyMovement : MonoBehaviour
 {
     public enum EAttackDirections { MeleeR, MeleeL, RangeR, RangeL, Null };
 
+    public enum EActionMode { Wander, Pursue, Attack };
+
     [Header("Movement")]
     [SerializeField]
     private float speed;
@@ -22,6 +24,9 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField]
     private GameObject[] attackPositions;
 
+    [SerializeField]
+    private float wanderDistance = 3.0f;
+
     private GameObject target;
 
     private float targetDistance;
@@ -31,12 +36,16 @@ public class EnemyMovement : MonoBehaviour
 
     private Dictionary<EAttackDirections, GameObject> attackPoints = new Dictionary<EAttackDirections, GameObject>();
 
-    private EAttackDirections attackDirection;
-    // Start is called before the first frame update
-    void Start()
+    private EAttackDirections attackDirection = EAttackDirections.Null;
+    private EActionMode actionMode = EActionMode.Wander;
+    private Vector3 startPos;
+
+    private Vector2 targetPos = Vector2.zero;
+
+    private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
         target = FindObjectOfType<PlayerMovement>().gameObject;
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         for (int i = 0; i < attackDirections.Length && i < attackPositions.Length; i++)
         {
@@ -44,21 +53,39 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        EnemyManager.Instance.AddEnemy(this);
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    { 
+        startPos = transform.position;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if (target)
+        if (actionMode == EActionMode.Pursue)
         {
-            targetDistance = Vector2.Distance(attackPoints[attackDirection].transform.position, target.transform.position);         
-        }
+            if (target)
+            {
+                targetDistance = Vector2.Distance(attackPoints[attackDirection].transform.position, target.transform.position);
+            }
 
-        if (targetDistance < chaseDistance)
-        {
-            ChaseTarget();
+            if (targetDistance < chaseDistance && targetDistance > stopDistance)
+            {
+                ChaseTarget();
+            }
+            else
+            {
+                StopChaseTarget();
+            }
         }
-        else
+        else if (actionMode == EActionMode.Wander)
         {
-            StopChaseTarget();
+            transform.position = Vector2.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
         }
     }
 
@@ -73,6 +100,22 @@ public class EnemyMovement : MonoBehaviour
     void StopChaseTarget()
     {
 
+    }
+
+    public void AssignPosition(EAttackDirections dir)
+    {
+        attackDirection = dir;
+        if (attackDirection == EAttackDirections.Null)
+        {
+            actionMode = EActionMode.Wander;
+            float angle = UnityEngine.Random.Range(0, 360.0f);
+            float distance = UnityEngine.Random.Range(0, wanderDistance);
+            targetPos = transform.position + new Vector3(Mathf.Cos(angle) * distance, Mathf.Sin(angle) * distance);
+        }
+        else
+        {
+            actionMode = EActionMode.Pursue;
+        }
     }
 
     public bool IsRightOfTarget()
