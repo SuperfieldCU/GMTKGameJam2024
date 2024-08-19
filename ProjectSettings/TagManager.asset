@@ -11,11 +11,11 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - PlayerAttack
+  - EnemyAttack
+  - Object
   - 
   - 
   - 
@@ -47,9 +47,9 @@ TagManager:
   - name: Objects
     uniqueID: 430960731
     locked: 0
-  - name: Characters
-    uniqueID: 1951409425
-    locked: 0
   - name: Enemies
     uniqueID: 1617681713
+    locked: 0
+  - name: Characters
+    uniqueID: 1951409425
     locked: 0
