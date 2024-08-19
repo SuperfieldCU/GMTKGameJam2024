@@ -148,7 +148,7 @@ public class EnemyManager : Singleton<EnemyManager>
 
     public void RemoveEnemy(EnemyMovement enemy)
     {
-        if (engagedEnemies[enemy.GetAttackDirection()].Contains(enemy))
+        if (enemy.GetAttackDirection() != EAttackDirections.Null && engagedEnemies[enemy.GetAttackDirection()].Contains(enemy))
         {
             engagedEnemies[enemy.GetAttackDirection()].Remove(enemy);
         }

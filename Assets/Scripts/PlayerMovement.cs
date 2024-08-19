@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static EnemyMovement;
 using static UnityEngine.InputSystem.InputAction;
 
 //ensure gameobject has required component
@@ -32,6 +31,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private MeleeAttack meleeAttack;
 
+    private bool isAttackQueued = false;
+    private bool isAttacking = false;
+
     private Vector3 velocity = Vector3.zero;
 
     private bool isGrounded = true;
@@ -49,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
         controls.Movement.Movement.performed += Move;
         controls.Movement.Movement.canceled += StopMoving;
         controls.Movement.Movement.Enable();
-        controls.Movement.Jump.performed += Jump;
+        controls.Movement.Jump.started += Jump;
         controls.Movement.Jump.Enable();
         controls.Combat.MeleeAttack.started += BeginAttack;
         controls.Combat.MeleeAttack.Enable();
@@ -117,18 +119,32 @@ public class PlayerMovement : MonoBehaviour
 
     void BeginAttack(CallbackContext ctx)
     {
-        meleeAttack.StartAttack();
+        if (isAttacking)
+        {
+            isAttackQueued = true;
+        }
+        else
+        {
+            isAttacking = true;
+            meleeAttack.StartAttack();
+        }
     }
 
     public void Attack()
     {
-        Debug.Log("attack");
         meleeAttack.Attack(bFacingRight);
     }
 
     public void StopAttack()
     {
+        isAttacking = false;
         meleeAttack.StopAttack();
+        if (isAttackQueued)
+        {
+            isAttackQueued = false;
+            isAttacking = true;
+            meleeAttack.StartAttack();
+        }
     }
 
     private void flip()
