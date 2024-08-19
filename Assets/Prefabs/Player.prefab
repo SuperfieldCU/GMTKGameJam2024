@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 7927216006049870506}
   - component: {fileID: 8590845640591370220}
   - component: {fileID: 8132070893093189175}
-  m_Layer: 0
+  - component: {fileID: 6096125385182782481}
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -72,8 +73,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1617681713
-  m_SortingLayer: 3
+  m_SortingLayerID: 1951409425
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 1857860732, guid: 34b6dbdfe656a014ab7e0b812760670e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -127,3 +128,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 10
   movementSmooth: 0.5
+--- !u!70 &6096125385182782481
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5366465539260242971}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.06910572, y: 0.5173966}
+  m_Size: {x: 0.5303812, y: 1.0347933}
+  m_Direction: 0

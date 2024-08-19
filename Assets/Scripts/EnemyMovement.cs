@@ -18,6 +18,8 @@ public class EnemyMovement : MonoBehaviour
     private float chaseDistance;
     [SerializeField]
     private float stopDistance;
+    [SerializeField]
+    private float wanderDistance = 3.0f;
 
     [Header("Attack Positions")]
     [SerializeField]
@@ -27,7 +29,10 @@ public class EnemyMovement : MonoBehaviour
     private GameObject[] attackPositions;
 
     [SerializeField]
-    private float wanderDistance = 3.0f;
+    private MeleeAttack meleeAttack;
+
+    [SerializeField]
+    private RangedAttack rangeAttack;
 
     private GameObject target;
 
@@ -84,7 +89,7 @@ public class EnemyMovement : MonoBehaviour
             }
             else if (targetDistance <= stopDistance)
             {
-                AttackTarget();
+                StartAttack();
             }
             else
             {
@@ -105,16 +110,32 @@ public class EnemyMovement : MonoBehaviour
         transform.position += newPointPos - attackPoints[attackDirection].transform.position;
     }
 
-    void AttackTarget()
+    void StartAttack()
     {
         animator.SetBool("isMoving", false);
         actionMode = EActionMode.Attack;
-        MeleeAttack();
+        BeginAttack();
     }
 
-    void MeleeAttack()
+    void BeginAttack()
     {
-        animator.SetBool("meleeAttack", true);
+        meleeAttack.StartAttack();
+    }
+
+    public void Attack()
+    {
+        switch (attackDirection)
+        {
+            case EAttackDirections.MeleeL:
+                meleeAttack.Attack(false);
+                break;
+            case EAttackDirections.MeleeR:
+                meleeAttack.Attack(true);
+                break;
+            default:
+                animator.SetBool("rangeAttack", true);
+                break;
+        }
     }
 
     void StopChaseTarget()
