@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
@@ -8,17 +9,47 @@ public class Health : MonoBehaviour
 
     [SerializeField] private ECharacterType charType;
 
-    [SerializeField] private int health;
+    [SerializeField]
+    private int maxHealth;
+
+    [SerializeField]
+    private Slider healthSlider;
+
+    private int healthHolder;
+    public int health
+    {
+        get { return healthHolder; }
+        set
+        {
+            if (healthHolder == value) return;
+            healthHolder = value;
+            if (OnHealthChanged != null)
+                OnHealthChanged(healthHolder);
+        }
+    }
 
     [SerializeField] private float invulnerabilityTime;
 
     private bool bIsInvulnerable;
-    
+
+    public delegate void OnHealthChangedDelegate(int newHealth);
+    public event OnHealthChangedDelegate OnHealthChanged;
+
+    private void Awake()
+    {
+        health = maxHealth;
+        healthSlider.maxValue = maxHealth;
+        healthSlider.value = health;
+    }
+
     public void TakeDamage(int damage)
     {
-        health -= damage;
-        Debug.Log("Health: " + health);
-        StartCoroutine(Invulnerability());
+        if (!bIsInvulnerable)
+        {
+            health -= damage;
+            healthSlider.value = health;
+            StartCoroutine(Invulnerability());
+        }
     }
 
     IEnumerator Invulnerability()

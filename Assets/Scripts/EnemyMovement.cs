@@ -55,6 +55,8 @@ public class EnemyMovement : MonoBehaviour
         target = FindObjectOfType<PlayerMovement>().gameObject;
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        Health health = GetComponent<Health>();
+        health.OnHealthChanged += TakeDamage;
 
         for (int i = 0; i < attackDirections.Length && i < attackPositions.Length; i++)
         {
@@ -199,5 +201,19 @@ public class EnemyMovement : MonoBehaviour
     public bool IsWithinRange()
     {
         return Vector2.Distance(transform.position, target.transform.position) <= GetChaseDistance();
+    }
+
+    public void TakeDamage(int newHealth)
+    {
+        if (newHealth <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (EnemyManager.Instance)
+            EnemyManager.Instance.RemoveEnemy(this);
     }
 }

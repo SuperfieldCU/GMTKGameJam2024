@@ -124,7 +124,7 @@ public class EnemyManager : Singleton<EnemyManager>
         }
         if (engagedEnemies[rangeDir].Count != enemiesPerPosition)
         {
-            int randVal = UnityEngine.Random.Range(0, enemyData.Count - 1);
+            int randVal = UnityEngine.Random.Range(0, enemyData.Count);
             enemyData[randVal].enemy.AssignPosition(rangeDir);
             engagedEnemies[rangeDir].Add(enemyData[randVal].enemy);
             enemyQueue.Remove(enemyData[randVal].enemy);
@@ -148,7 +148,7 @@ public class EnemyManager : Singleton<EnemyManager>
 
     public void RemoveEnemy(EnemyMovement enemy)
     {
-        if (engagedEnemies[enemy.GetAttackDirection()].Contains(enemy))
+        if (enemy.GetAttackDirection() != EAttackDirections.Null && engagedEnemies[enemy.GetAttackDirection()].Contains(enemy))
         {
             engagedEnemies[enemy.GetAttackDirection()].Remove(enemy);
         }
