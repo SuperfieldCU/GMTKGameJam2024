@@ -50,9 +50,5 @@ public class MeleeAttack : MonoBehaviour
         {
             health.TakeDamage(damage);
         }
-        else
-        {
-            Debug.Log("No health on " + collision.name);
-        }
     }
 }
