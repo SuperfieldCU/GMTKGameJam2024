@@ -45,6 +45,14 @@ public class MeleeAttack : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        collision.gameObject.GetComponent<Health>().TakeDamage(damage);
+        Health health = collision.GetComponent<Health>();
+        if (health)
+        {
+            health.TakeDamage(damage);
+        }
+        else
+        {
+            Debug.Log("No health on " + collision.name);
+        }
     }
 }
