@@ -34,6 +34,9 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField]
     private RangedAttack rangeAttack;
 
+    [SerializeField]
+    private float attackDelay;
+
     private GameObject target;
 
     private float targetDistance;
@@ -138,6 +141,18 @@ public class EnemyMovement : MonoBehaviour
                 animator.SetBool("rangeAttack", true);
                 break;
         }
+    }
+
+    public void StopAttack()
+    {
+        meleeAttack.StopAttack();
+        StartCoroutine(AttackDelay());
+    }
+
+    IEnumerator AttackDelay()
+    {
+        yield return new WaitForSeconds(attackDelay);
+        Attack();
     }
 
     void StopChaseTarget()

@@ -149,6 +149,7 @@ MonoBehaviour:
   - {fileID: 1982629035285424231}
   meleeAttack: {fileID: 7639592141716243999}
   rangeAttack: {fileID: 0}
+  attackDelay: 0.5
 --- !u!95 &2733159860372896157
 Animator:
   serializedVersion: 5
@@ -162,7 +163,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 6862309d3d87aaa48bc3230580564ca1, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
