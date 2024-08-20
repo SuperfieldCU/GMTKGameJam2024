@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
+using FMOD.Studio;
 
 //ensure gameobject has required component
 [RequireComponent(typeof(Rigidbody2D))]
@@ -38,7 +39,15 @@ public class PlayerMovement : MonoBehaviour
 
     private bool isGrounded = true;
     private float jumpLoc;
+
+    private EventInstance playerFootsteps;
     // Start is called before the first frame update
+
+    private void Start()
+    {
+        playerFootsteps = AudioManager.instance.CreateInstance(FMODEvents.instance.playerFootsteps);
+    }
+
     void Awake()
     {
         //setup rigidbody and sprite renderer
@@ -64,12 +73,20 @@ public class PlayerMovement : MonoBehaviour
     {
         moveDir = ctx.ReadValue<Vector2>();
         animator.SetBool("isMoving", true);
+        PLAYBACK_STATE playbackState;
+        playerFootsteps.getPlaybackState(out playbackState);
+        if (playbackState.Equals(PLAYBACK_STATE.STOPPED))
+        {
+            playerFootsteps.start();
+        }
     }
 
     void StopMoving(CallbackContext ctx)
     {
         moveDir = Vector2.zero;
         animator.SetBool("isMoving", false);
+        playerFootsteps.stop(STOP_MODE.ALLOWFADEOUT);
+
     }
 
     void Jump(CallbackContext ctx)
@@ -133,6 +150,7 @@ public class PlayerMovement : MonoBehaviour
     public void Attack()
     {
         meleeAttack.Attack(bFacingRight);
+        AudioManager.instance.PlayOneShot(FMODEvents.instance.playerAttack, this.transform.position);
     }
 
     public void StopAttack()
@@ -165,5 +183,6 @@ public class PlayerMovement : MonoBehaviour
     private void OnDestroy()
     {
         controls.Disable();
+        AudioManager.instance.PlayOneShot(FMODEvents.instance.playerDie, this.transform.position);
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMOD.Studio;
 
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(Animator))]
@@ -57,6 +58,7 @@ public class EnemyMovement : MonoBehaviour
 
     private float minHeight;
 
+    private EventInstance microMove;
     private void Awake()
     {
         target = FindObjectOfType<PlayerMovement>().gameObject;
@@ -82,6 +84,7 @@ public class EnemyMovement : MonoBehaviour
         startPos = transform.position;
         maxHeight = GameManager.Instance.GetMaxHeight();
         minHeight = GameManager.Instance.GetMinheight();
+        microMove = AudioManager.instance.CreateInstance(FMODEvents.instance.microFootsteps);
     }
 
     // Update is called once per frame
@@ -119,6 +122,13 @@ public class EnemyMovement : MonoBehaviour
 
         Vector3 newPointPos = Vector2.MoveTowards(attackPoints[attackDirection].transform.position, target.transform.position, speed * Time.deltaTime);
         transform.position += newPointPos - attackPoints[attackDirection].transform.position;
+        PLAYBACK_STATE playbackState;
+        microMove.getPlaybackState(out playbackState);
+        if (playbackState.Equals(PLAYBACK_STATE.STOPPED))
+        {
+            microMove.start();
+        }
+
     }
 
     void StartAttack()
@@ -131,6 +141,7 @@ public class EnemyMovement : MonoBehaviour
     void BeginAttack()
     {
         meleeAttack.StartAttack();
+        AudioManager.instance.PlayOneShot(FMODEvents.instance.microAttack, this.transform.position);
     }
 
     public void Attack()
@@ -164,6 +175,7 @@ public class EnemyMovement : MonoBehaviour
     void StopChaseTarget()
     {
         animator.SetBool("isMoving", false);
+        microMove.stop(STOP_MODE.ALLOWFADEOUT);
     }
 
     public void AssignPosition(EAttackDirections dir)
@@ -237,5 +249,6 @@ public class EnemyMovement : MonoBehaviour
     {
         if (EnemyManager.Instance)
             EnemyManager.Instance.RemoveEnemy(this);
+        AudioManager.instance.PlayOneShot(FMODEvents.instance.microDie, this.transform.position);
     }
 }
