@@ -53,6 +53,10 @@ public class EnemyMovement : MonoBehaviour
 
     private Vector2 targetPos = Vector2.zero;
 
+    private float maxHeight;
+
+    private float minHeight;
+
     private void Awake()
     {
         target = FindObjectOfType<PlayerMovement>().gameObject;
@@ -76,6 +80,8 @@ public class EnemyMovement : MonoBehaviour
     void Start()
     { 
         startPos = transform.position;
+        maxHeight = GameManager.Instance.GetMaxHeight();
+        minHeight = GameManager.Instance.GetMinheight();
     }
 
     // Update is called once per frame
@@ -170,6 +176,7 @@ public class EnemyMovement : MonoBehaviour
             float angle = UnityEngine.Random.Range(0, 360.0f);
             float distance = UnityEngine.Random.Range(0, wanderDistance);
             targetPos = transform.position + new Vector3(Mathf.Cos(angle) * distance, Mathf.Sin(angle) * distance);
+            targetPos.y = Mathf.Clamp(targetPos.y, minHeight, maxHeight);
         }
         else
         {
