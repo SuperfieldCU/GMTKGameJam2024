@@ -35,6 +35,9 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField]
     private RangedAttack rangeAttack;
 
+    [SerializeField]
+    private float attackDelay;
+
     private GameObject target;
 
     private float targetDistance;
@@ -47,17 +50,18 @@ public class EnemyMovement : MonoBehaviour
 
     private EAttackDirections attackDirection = EAttackDirections.Null;
     private EActionMode actionMode = EActionMode.Wander;
-    private Vector3 startPos;
 
     private Vector2 targetPos = Vector2.zero;
 
+    private float maxHeight;
+
+    private float minHeight;
+
     private EventInstance microMove;
 
-    private void Start()
-    {
-        microMove = AudioManager.instance.CreateInstance(FMODEvents.instance.microFootsteps);
-    }
+    private bool isUsingAudio = false;
 
+    private bool canAttack = true;
     private void Awake()
     {
         target = FindObjectOfType<PlayerMovement>().gameObject;
@@ -78,9 +82,19 @@ public class EnemyMovement : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void start()
+    void Start()
     { 
-        startPos = transform.position;
+        maxHeight = GameManager.Instance.GetMaxHeight();
+        minHeight = GameManager.Instance.GetMinheight();
+        if (FMODEvents.instance)
+        {
+            microMove = AudioManager.instance.CreateInstance(FMODEvents.instance.microFootsteps);
+            isUsingAudio = true;
+        }
+        else
+        {
+            isUsingAudio = false;
+        }
     }
 
     // Update is called once per frame
@@ -118,17 +132,21 @@ public class EnemyMovement : MonoBehaviour
 
         Vector3 newPointPos = Vector2.MoveTowards(attackPoints[attackDirection].transform.position, target.transform.position, speed * Time.deltaTime);
         transform.position += newPointPos - attackPoints[attackDirection].transform.position;
-        PLAYBACK_STATE playbackState;
-        microMove.getPlaybackState(out playbackState);
-        if (playbackState.Equals(PLAYBACK_STATE.STOPPED))
+        if (isUsingAudio)
         {
-            microMove.start();
+            PLAYBACK_STATE playbackState;
+            microMove.getPlaybackState(out playbackState);
+            if (playbackState.Equals(PLAYBACK_STATE.STOPPED))
+            {
+                microMove.start();
+            }
         }
-
     }
 
     void StartAttack()
     {
+        if (!canAttack)
+            return;
         animator.SetBool("isMoving", false);
         actionMode = EActionMode.Attack;
         BeginAttack();
@@ -137,7 +155,8 @@ public class EnemyMovement : MonoBehaviour
     void BeginAttack()
     {
         meleeAttack.StartAttack();
-        AudioManager.instance.PlayOneShot(FMODEvents.instance.microAttack, this.transform.position);
+        if (isUsingAudio)
+            AudioManager.instance.PlayOneShot(FMODEvents.instance.microAttack, this.transform.position);
     }
 
     public void Attack()
@@ -156,10 +175,25 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    public void StopAttack()
+    {
+        meleeAttack.StopAttack();
+        StartCoroutine(AttackDelay());
+    }
+
+    IEnumerator AttackDelay()
+    {
+        canAttack = false;
+        actionMode = EActionMode.Pursue;
+        yield return new WaitForSeconds(attackDelay);
+        canAttack = true;
+    }
+
     void StopChaseTarget()
     {
         animator.SetBool("isMoving", false);
-        microMove.stop(STOP_MODE.ALLOWFADEOUT);
+        if (isUsingAudio)
+            microMove.stop(STOP_MODE.ALLOWFADEOUT);
     }
 
     public void AssignPosition(EAttackDirections dir)
@@ -172,6 +206,7 @@ public class EnemyMovement : MonoBehaviour
             float angle = UnityEngine.Random.Range(0, 360.0f);
             float distance = UnityEngine.Random.Range(0, wanderDistance);
             targetPos = transform.position + new Vector3(Mathf.Cos(angle) * distance, Mathf.Sin(angle) * distance);
+            targetPos.y = Mathf.Clamp(targetPos.y, minHeight, maxHeight);
         }
         else
         {
@@ -222,16 +257,26 @@ public class EnemyMovement : MonoBehaviour
 
     public void TakeDamage(int newHealth)
     {
+        StartCoroutine(FlashRed());
         if (newHealth <= 0)
         {
             Destroy(gameObject);
         }
     }
 
+    IEnumerator FlashRed()
+    {
+        Color c = spriteRenderer.color;
+        spriteRenderer.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        spriteRenderer.color = c;
+    }
+
     private void OnDestroy()
     {
         if (EnemyManager.Instance)
             EnemyManager.Instance.RemoveEnemy(this);
-        AudioManager.instance.PlayOneShot(FMODEvents.instance.microDie, this.transform.position);
+        if (isUsingAudio)
+            AudioManager.instance.PlayOneShot(FMODEvents.instance.microDie, this.transform.position);
     }
 }

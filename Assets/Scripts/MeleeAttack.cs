@@ -14,6 +14,9 @@ public class MeleeAttack : MonoBehaviour
     private float stunChance;
 
     [SerializeField]
+    private float knockbackForce;
+
+    [SerializeField]
     private string animationString;
 
     [SerializeField]
@@ -49,6 +52,16 @@ public class MeleeAttack : MonoBehaviour
         if (health)
         {
             health.TakeDamage(damage);
+            float randVal = UnityEngine.Random.Range(0, 1.0f);
+            if (randVal <= stunChance)
+            {
+                Vector2 dir = new Vector2(knockbackForce, 0);
+                if (!isFacingRight)
+                {
+                    dir.x *= -1;
+                }
+                collision.gameObject.GetComponent<Rigidbody2D>().AddForce(dir);
+            }
         }
     }
 }
