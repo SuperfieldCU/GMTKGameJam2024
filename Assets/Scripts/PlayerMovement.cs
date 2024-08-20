@@ -41,11 +41,21 @@ public class PlayerMovement : MonoBehaviour
     private float jumpLoc;
 
     private EventInstance playerFootsteps;
+
+    private bool isUsingAudio = false;
     // Start is called before the first frame update
 
     private void Start()
     {
-        playerFootsteps = AudioManager.instance.CreateInstance(FMODEvents.instance.playerFootsteps);
+        if (FMODEvents.instance)
+        {
+            playerFootsteps = AudioManager.instance.CreateInstance(FMODEvents.instance.playerFootsteps);
+            isUsingAudio = true;
+        }
+        else
+        {
+            isUsingAudio = false;
+        }
     }
 
     void Awake()
@@ -73,11 +83,14 @@ public class PlayerMovement : MonoBehaviour
     {
         moveDir = ctx.ReadValue<Vector2>();
         animator.SetBool("isMoving", true);
-        PLAYBACK_STATE playbackState;
-        playerFootsteps.getPlaybackState(out playbackState);
-        if (playbackState.Equals(PLAYBACK_STATE.STOPPED))
+        if (isUsingAudio)
         {
-            playerFootsteps.start();
+            PLAYBACK_STATE playbackState;
+            playerFootsteps.getPlaybackState(out playbackState);
+            if (playbackState.Equals(PLAYBACK_STATE.STOPPED))
+            {
+                playerFootsteps.start();
+            }
         }
     }
 
@@ -85,7 +98,8 @@ public class PlayerMovement : MonoBehaviour
     {
         moveDir = Vector2.zero;
         animator.SetBool("isMoving", false);
-        playerFootsteps.stop(STOP_MODE.ALLOWFADEOUT);
+        if (isUsingAudio)
+            playerFootsteps.stop(STOP_MODE.ALLOWFADEOUT);
 
     }
 
@@ -183,6 +197,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnDestroy()
     {
         controls.Disable();
-        AudioManager.instance.PlayOneShot(FMODEvents.instance.playerDie, this.transform.position);
+        if (isUsingAudio)
+            AudioManager.instance.PlayOneShot(FMODEvents.instance.playerDie, this.transform.position);
     }
 }

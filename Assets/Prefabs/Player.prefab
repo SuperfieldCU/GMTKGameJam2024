@@ -587,6 +587,7 @@ MonoBehaviour:
   attackCollider: {fileID: 7719593709387332327}
   damage: 3
   stunChance: 0.5
+  knockbackForce: 200
   animationString: meleeAttack
   animator: {fileID: 1715141618962841356}
 --- !u!1 &8219546451663801135
@@ -624,7 +625,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -25}
+  m_AnchoredPosition: {x: 50, y: -10}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &3113050603463673469
