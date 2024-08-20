@@ -122,6 +122,51 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &71699053
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 71699055}
+  - component: {fileID: 71699054}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &71699054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 71699053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f83b7ffb426d64cf6ba63829782774b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &71699055
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 71699053}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.624051, y: 0.910512, z: 0.044546742}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 524287046}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &96976002
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -541,6 +586,99 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &524287045
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 524287046}
+  - component: {fileID: 524287047}
+  m_Layer: 0
+  m_Name: FMODEvents
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &524287046
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 524287045}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 71699055}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &524287047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 524287045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71c60b2af16f846e484ebef002bf44ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <playerFootsteps>k__BackingField:
+    Guid:
+      Data1: -708479192
+      Data2: 1298472178
+      Data3: -1920248923
+      Data4: 775223881
+    Path: event:/Player/Player Footsteps
+  <playerAttack>k__BackingField:
+    Guid:
+      Data1: -996185309
+      Data2: 1112786985
+      Data3: -1916915545
+      Data4: 970000720
+    Path: event:/Player/PlayerHit
+  <playerDie>k__BackingField:
+    Guid:
+      Data1: 990518306
+      Data2: 1162615525
+      Data3: -1483616370
+      Data4: -349548624
+    Path: event:/Player/Player Die
+  <microFootsteps>k__BackingField:
+    Guid:
+      Data1: -1971583004
+      Data2: 1231022364
+      Data3: 1456618112
+      Data4: 1375886417
+    Path: event:/Micro/Micro Steps
+  <microAttack>k__BackingField:
+    Guid:
+      Data1: 963661787
+      Data2: 1173323650
+      Data3: -1424768331
+      Data4: -572906164
+    Path: event:/Micro/Micro Bite
+  <microDie>k__BackingField:
+    Guid:
+      Data1: 16666093
+      Data2: 1185811849
+      Data3: 1303255687
+      Data4: 503356563
+    Path: event:/Micro/Micro die
+  <music>k__BackingField:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!1001 &566903212
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1190,3 +1328,5 @@ SceneRoots:
   - {fileID: 1177400260}
   - {fileID: 1825781129}
   - {fileID: 341828247}
+  - {fileID: 246861048}
+  - {fileID: 71699055}

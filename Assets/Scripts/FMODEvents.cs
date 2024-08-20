@@ -15,19 +15,6 @@ public class FMODEvents : MonoBehaviour
     [field: Header("Player Die")]
     [field: SerializeField] public EventReference playerDie { get; private set; }
 
-    [field: Header("Player Shrink")]
-    [field: SerializeField] public EventReference playerShrink { get; private set; }
-
-
-    [field: Header("Ant Footsteps")]
-    [field: SerializeField] public EventReference antFootsteps { get; private set; }
-
-    [field: Header("Ant Attack")]
-    [field: SerializeField] public EventReference antAttack { get; private set; }
-
-    [field: Header("Ant Die")]
-    [field: SerializeField] public EventReference antDie { get; private set; }
-
 
     [field: Header("Micro Footsteps")]
     [field: SerializeField] public EventReference microFootsteps { get; private set; }
@@ -37,17 +24,6 @@ public class FMODEvents : MonoBehaviour
 
     [field: Header("Micro Die")]
     [field: SerializeField] public EventReference microDie { get; private set; }
-
-
-    [field: Header("Rat Footsteps")]
-    [field: SerializeField] public EventReference ratFootsteps { get; private set; }
-
-    [field: Header("Rat Attack")]
-    [field: SerializeField] public EventReference ratAttack { get; private set; }
-
-    [field: Header("Rat Die")]
-    [field: SerializeField] public EventReference ratDie { get; private set; }
-
 
     [field: Header("Music")]
     [field: SerializeField] public EventReference music { get; private set; }

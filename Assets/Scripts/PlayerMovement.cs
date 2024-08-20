@@ -150,6 +150,7 @@ public class PlayerMovement : MonoBehaviour
     public void Attack()
     {
         meleeAttack.Attack(bFacingRight);
+        AudioManager.instance.PlayOneShot(FMODEvents.instance.playerAttack, this.transform.position);
     }
 
     public void StopAttack()
